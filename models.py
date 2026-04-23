@@ -13,13 +13,11 @@ class WeakSLM:
             "text-generation",
             model=self.MODEL,
             device_map="auto",
-            max_new_tokens=64,
         )
 
     def classify(self, prompt: str) -> str:
         messages = [{"role": "user", "content": prompt}]
-        result = self.pipe(messages)
-        # transformers returns the full message list; last entry is the assistant reply
+        result = self.pipe(messages, max_new_tokens=64)
         return result[0]["generated_text"][-1]["content"].strip()
 
 
