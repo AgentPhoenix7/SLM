@@ -1,4 +1,8 @@
 from __future__ import annotations
+import re
+
+
+LABEL_PREFIX = re.compile(r"^\s*(?:final\s+)?label\s*:\s*", re.IGNORECASE)
 
 
 def zero_shot(task: str, text: str) -> str:
@@ -39,6 +43,14 @@ def optimized(task: str, text: str, examples: list[tuple[str, str]]) -> str:
 
 
 def extract_label(raw: str) -> str:
-    """Pull the last non-empty line from model output (for CoT responses)."""
+    """Pull a clean final label from model output."""
     lines = [line.strip() for line in raw.strip().splitlines() if line.strip()]
-    return lines[-1] if lines else raw.strip()
+    label = lines[-1] if lines else raw.strip()
+    label = LABEL_PREFIX.sub("", label).strip()
+
+    if "->" in label:
+        label = label.rsplit("->", 1)[-1].strip()
+    if "→" in label:
+        label = label.rsplit("→", 1)[-1].strip()
+
+    return label.strip(" .\"'")

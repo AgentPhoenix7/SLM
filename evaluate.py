@@ -1,9 +1,10 @@
 from __future__ import annotations
 from sklearn.metrics import f1_score, accuracy_score
+from prompts import extract_label
 
 
 def normalize(label: str) -> str:
-    return label.lower().strip()
+    return extract_label(label).lower().strip()
 
 
 def score(predictions: list[str], references: list[str]) -> dict[str, float]:
