@@ -1,0 +1,9 @@
+Classify the language of the text as English, French, Spanish, or German
+1
+2
+English:The quick brown fox jumps over the lazy dog near the river bank.
+French:Le soleil brille sur la ville et les gens se promènent dans les rues animées.
+Spanish:El presidente anunció nuevas medidas económicas para apoyar a las familias.
+German:Die Wissenschaftler haben eine neue Methode zur Behandlung von Krebs entdeckt.
+English:Climate change continues to accelerate at an alarming rate according to new data.
+

@@ -1,0 +1,11 @@
+Classify sentiment as positive or negative
+2
+positive:This movie was amazing and I loved every minute of it.
+negative:I hated this film, total waste of time and money.
+positive:Wonderful experience from start to finish, highly recommend.
+2
+positive:I really enjoyed the food here, the flavors were incredible.
+negative:The service was terrible and the staff were incredibly rude.
+positive:Best purchase I have ever made, works perfectly out of the box.
+negative:Complete disappointment, broke after two days and stopped working.
+

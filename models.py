@@ -1,6 +1,10 @@
 from __future__ import annotations
+import logging
 from transformers import pipeline
 from huggingface_hub import InferenceClient
+
+logging.getLogger("transformers.generation.utils").setLevel(logging.ERROR)
+logging.getLogger("transformers.pipelines.base").setLevel(logging.ERROR)
 
 
 class WeakSLM:
@@ -14,14 +18,10 @@ class WeakSLM:
             model=self.MODEL,
             device_map="auto",
         )
-        # model's generation_config.json sets max_length=20 which conflicts
-        # with max_new_tokens; configure generation once on the model instead.
-        self.pipe.model.generation_config.max_length = None
-        self.pipe.model.generation_config.max_new_tokens = 64
 
     def classify(self, prompt: str) -> str:
         messages = [{"role": "user", "content": prompt}]
-        result = self.pipe(messages)
+        result = self.pipe(messages, max_new_tokens=64)
         return result[0]["generated_text"][-1]["content"].strip()
 
 

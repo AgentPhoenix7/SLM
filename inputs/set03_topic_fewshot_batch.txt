@@ -1,0 +1,12 @@
+Classify the topic as sports, politics, or technology
+2
+sports:The team won the championship after a thrilling penalty shootout in the final.
+politics:The senator introduced a new bill targeting healthcare reform and drug pricing.
+technology:The new chip architecture achieves twice the performance at half the power draw.
+2
+sports:The athlete shattered the world record in the 100m sprint at the summer games.
+technology:Scientists unveiled a quantum processor that outperforms classical supercomputers.
+politics:Exit polls show a razor-thin margin of victory in the presidential race.
+sports:The football club signed a record-breaking transfer deal ahead of the new season.
+technology:The latest smartphone update introduces on-device AI summarisation features.
+

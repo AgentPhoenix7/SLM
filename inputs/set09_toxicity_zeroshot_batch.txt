@@ -1,0 +1,9 @@
+Classify the text as toxic or non_toxic
+1
+2
+non_toxic:I disagree with your analysis but I appreciate you sharing your perspective here.
+toxic:You are completely stupid and should never be allowed to speak on this topic again.
+non_toxic:The results of the study suggest a moderate correlation but more data is needed.
+toxic:People like you are the reason this country is falling apart — just go away.
+non_toxic:That is an interesting point. I had not considered that angle before, thank you.
+

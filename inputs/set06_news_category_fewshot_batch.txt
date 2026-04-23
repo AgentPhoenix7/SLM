@@ -1,0 +1,12 @@
+Classify the news headline as business, science, health, or entertainment
+2
+business:Global markets rally as central banks signal a pause in interest rate hikes.
+science:Astronomers detect water ice deposits near the lunar south pole for the first time.
+health:New clinical trial shows promising results for an Alzheimer's vaccine candidate.
+2
+business:Tech giant reports record quarterly earnings driven by cloud services growth.
+entertainment:Award-winning director announces surprise sequel to a cult classic film.
+science:Physicists confirm existence of a new subatomic particle at the Large Hadron Collider.
+health:Study links ultra-processed food consumption to increased risk of early mortality.
+business:Airline industry faces turbulence as fuel costs surge and passenger demand softens.
+

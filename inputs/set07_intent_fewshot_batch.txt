@@ -1,0 +1,12 @@
+Classify the user message intent as question, complaint, compliment, or request
+2
+question:What are your store hours on weekends and public holidays?
+complaint:I have been waiting three weeks for my order and no one has responded to my emails.
+compliment:Your staff were incredibly helpful and made my visit a wonderful experience.
+2
+request:Please send me the invoice for my last three purchases as soon as possible.
+complaint:The product stopped working after two days and I am extremely frustrated with this.
+question:Is this item available in size large and in the colour blue?
+compliment:The onboarding process was seamless — one of the best experiences I have had.
+request:I would like to reschedule my appointment to next Tuesday afternoon if possible.
+

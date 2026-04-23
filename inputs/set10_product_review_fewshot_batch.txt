@@ -1,0 +1,12 @@
+Classify the product review sentiment as positive, neutral, or negative
+2
+positive:Exceeded all my expectations — fast shipping, great quality, would buy again.
+negative:Broke on first use. Packaging was damaged and customer service was unhelpful.
+neutral:It does what it says on the box. Nothing special but it gets the job done.
+2
+positive:Absolutely love this! Fits perfectly and the material feels premium and durable.
+neutral:Arrived on time. Product is average quality for the price — nothing extraordinary.
+negative:Very disappointed. Looked nothing like the photos and the size was completely wrong.
+positive:Great value for money. My kids love it and it has held up well over several months.
+neutral:Works fine. Setup took longer than expected but instructions were eventually clear.
+

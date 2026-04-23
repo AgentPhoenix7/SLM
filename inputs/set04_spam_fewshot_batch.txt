@@ -1,0 +1,12 @@
+Classify the message as spam or not_spam
+2
+spam:Congratulations! You won a free iPhone. Click here to claim your prize now!
+not_spam:Hey, are we still meeting for lunch tomorrow at noon?
+spam:URGENT: Your account is compromised. Send your password immediately to verify.
+2
+spam:You have been selected for a $5000 cash reward. Reply YES to claim it today.
+not_spam:Can you send me the report by end of day? Thanks.
+spam:Buy cheap prescription drugs online — no prescription needed, 80% off today only!
+not_spam:The meeting has been rescheduled to 3pm on Friday.
+not_spam:Just checking in — did you get my email about the project timeline?
+
