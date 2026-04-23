@@ -7,24 +7,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Python SLM classifier. Uses two Qwen2.5 models for classification via zero-shot and few-shot prompting (max 3 examples), comparing weak SLM output against strong LLM reference.
 
 **Outputs per run:**
-1. Raw SLM output (zero-shot, weak model)
-2. Optimized SLM output (few-shot + CoT, weak model)
-3. LLM reference output (few-shot + CoT, strong model)
-4. Accuracy / F1 score (optimized SLM vs reference)
+1. Zero-shot SLM output (weak model, no examples)
+2. Few-shot SLM output (weak model, plain few-shot)
+3. Optimized SLM output (weak model, few-shot + CoT)
+4. LLM reference output (strong model, few-shot + CoT)
+5. F1 / Accuracy — optimized SLM vs LLM ref, and optionally vs ground truth
 
 ## Environment
 
 - Python managed via pyenv, environment named `SLM`
 - Activate: `pyenv activate SLM`
 - Install deps: `pip install -r requirements.txt`
-- Run: `python main.py --task "..." --text "..." --examples "label:text" [--hf-token TOKEN]`
-- HF token can also be set via `HF_TOKEN` env var
+- Run: `python main.py` (fully interactive — no CLI flags)
+- Set `HF_TOKEN` in `.env` or export before running
 
 ## Architecture
 
 | File | Role |
 |------|------|
-| `main.py` | CLI entry, orchestration, output table |
+| `main.py` | Interactive menu, orchestration, output tables |
 | `models.py` | `WeakSLM` (local transformers) + `StrongLLM` (HF Inference API) |
 | `prompts.py` | `zero_shot`, `few_shot`, `optimized` builders + `extract_label` |
 | `evaluate.py` | `score(predictions, references)` → F1 + accuracy via sklearn |
