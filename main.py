@@ -54,26 +54,34 @@ def main() -> None:
 
     examples = parse_examples(args.examples)
 
-    print("Loading weak SLM (Qwen2.5-0.5B, local)...")
+    print("[1/5] Loading weak SLM (Qwen2.5-0.5B, local) — may download on first run...")
     slm = WeakSLM()
+    print("      Done.")
 
-    print("Connecting to strong LLM (Qwen2.5-7B, HF API)...")
+    print("[2/5] Connecting to strong LLM (Qwen2.5-7B, HF API)...")
     llm = StrongLLM(token=args.hf_token)
+    print("      Done.")
 
     # --- zero-shot on weak model ---
+    print("[3/5] Running zero-shot on weak SLM...")
     raw_prompt = zero_shot(args.task, args.text)
     raw_output = extract_label(slm.classify(raw_prompt))
+    print(f"      -> {raw_output!r}")
 
     # --- optimized few-shot on weak model ---
+    print("[4/5] Running optimized few-shot on weak SLM...")
     if examples:
         opt_prompt = optimized(args.task, args.text, examples)
     else:
         opt_prompt = zero_shot(args.task, args.text)
     opt_output = extract_label(slm.classify(opt_prompt))
+    print(f"      -> {opt_output!r}")
 
     # --- optimized few-shot on strong model (reference) ---
+    print("[5/5] Running optimized few-shot on strong LLM (reference)...")
     ref_prompt = optimized(args.task, args.text, examples) if examples else zero_shot(args.task, args.text)
     ref_output = extract_label(llm.classify(ref_prompt))
+    print(f"      -> {ref_output!r}")
 
     metrics = score([opt_output], [ref_output])
 
