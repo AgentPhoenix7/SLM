@@ -133,20 +133,40 @@ def collect_inputs() -> tuple[str, list[tuple[str, str]], str, list[tuple[str, s
     return task, examples, eval_mode, batch
 
 
-# ── run one input through all strategies ──────────────────────────────────────
+# ── run all inputs through all strategies ─────────────────────────────────────
 
-def classify_one(
+def classify_all(
     slm: WeakSLM,
     llm: StrongLLM,
     task: str,
-    text: str,
+    texts: list[str],
     examples: list[tuple[str, str]],
-) -> dict[str, str]:
-    zero_out = extract_label(slm.classify(zero_shot(task, text)))
-    fs_out   = extract_label(slm.classify(few_shot(task, text, examples) if examples else zero_shot(task, text)))
-    opt_out  = extract_label(slm.classify(optimized(task, text, examples) if examples else zero_shot(task, text)))
-    ref_out  = extract_label(llm.classify(optimized(task, text, examples) if examples else zero_shot(task, text)))
-    return {"zero": zero_out, "few": fs_out, "opt": opt_out, "ref": ref_out}
+) -> list[dict[str, str]]:
+    zero_prompts = [zero_shot(task, t) for t in texts]
+    if examples:
+        fs_prompts  = [few_shot(task, t, examples) for t in texts]
+        opt_prompts = [optimized(task, t, examples) for t in texts]
+    else:
+        fs_prompts  = zero_prompts
+        opt_prompts = zero_prompts
+
+    print("  [SLM 1/3] Zero-shot batch...")
+    zero_outs = [extract_label(r) for r in slm.classify_batch(zero_prompts)]
+    print("  [SLM 2/3] Few-shot batch...")
+    fs_outs   = [extract_label(r) for r in slm.classify_batch(fs_prompts)]
+    print("  [SLM 3/3] Optimized batch...")
+    opt_outs  = [extract_label(r) for r in slm.classify_batch(opt_prompts)]
+
+    ref_outs: list[str] = []
+    total = len(opt_prompts)
+    for i, prompt in enumerate(opt_prompts, 1):
+        print(f"  [LLM {i}/{total}] reference...")
+        ref_outs.append(extract_label(llm.classify(prompt)))
+
+    return [
+        {"zero": z, "few": f, "opt": o, "ref": r}
+        for z, f, o, r in zip(zero_outs, fs_outs, opt_outs, ref_outs)
+    ]
 
 
 # ── main ───────────────────────────────────────────────────────────────────────
@@ -169,15 +189,14 @@ def main() -> None:
     print("        Done.")
 
     header("Running Classification")
-    results: list[dict[str, str]] = []
-    gt_labels: list[str | None] = []
-    total = len(batch)
-    for idx, (text, gt) in enumerate(batch, 1):
-        print(f"  [{idx}/{total}] {text[:60]!r}")
-        out = classify_one(slm, llm, task, text, examples)
-        results.append(out)
-        gt_labels.append(gt)
-        print(f"          zero={out['zero']!r}  few={out['few']!r}  opt={out['opt']!r}  ref={out['ref']!r}")
+    texts     = [t for t, _ in batch]
+    gt_labels = [gt for _, gt in batch]
+    results   = classify_all(slm, llm, task, texts, examples)
+
+    header("Per-sample results")
+    for text, out in zip(texts, results):
+        print(f"  {text[:60]!r}")
+        print(f"    zero={out['zero']!r}  few={out['few']!r}  opt={out['opt']!r}  ref={out['ref']!r}")
 
     header("Results")
     if "Single" in eval_mode:

@@ -4,7 +4,6 @@ from transformers import pipeline
 from huggingface_hub import InferenceClient
 
 logging.getLogger("transformers.generation.utils").setLevel(logging.ERROR)
-logging.getLogger("transformers.pipelines.base").setLevel(logging.ERROR)
 
 
 class WeakSLM:
@@ -19,10 +18,10 @@ class WeakSLM:
             device_map="auto",
         )
 
-    def classify(self, prompt: str) -> str:
-        messages = [{"role": "user", "content": prompt}]
-        result = self.pipe(messages, max_new_tokens=64)
-        return result[0]["generated_text"][-1]["content"].strip()
+    def classify_batch(self, prompts: list[str]) -> list[str]:
+        conversations = [[{"role": "user", "content": p}] for p in prompts]
+        results = self.pipe(conversations, max_new_tokens=64, batch_size=len(conversations))
+        return [r[0]["generated_text"][-1]["content"].strip() for r in results]
 
 
 class StrongLLM:
