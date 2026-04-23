@@ -4,29 +4,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Python SLM (Small Language Model) classifier. Performs classification via zero-shot and few-shot prompting (max 3 examples), optimizing SLM output to match stronger LLM quality.
+Python SLM classifier. Uses two Qwen2.5 models for classification via zero-shot and few-shot prompting (max 3 examples), comparing weak SLM output against strong LLM reference.
 
 **Outputs per run:**
-1. Raw SLM output
-2. Optimized SLM output
-3. LLM reference output
-4. Evaluation score (F1 or Accuracy)
+1. Raw SLM output (zero-shot, weak model)
+2. Optimized SLM output (few-shot + CoT, weak model)
+3. LLM reference output (few-shot + CoT, strong model)
+4. Accuracy / F1 score (optimized SLM vs reference)
 
 ## Environment
 
 - Python managed via pyenv, environment named `SLM`
 - Activate: `pyenv activate SLM`
-- Run: `python main.py`
+- Install deps: `pip install -r requirements.txt`
+- Run: `python main.py --task "..." --text "..." --examples "label:text" [--hf-token TOKEN]`
+- HF token can also be set via `HF_TOKEN` env var
 
-## Architecture Intent
+## Architecture
 
-When implemented, the system should have these logical components:
-- **Prompt builder** — constructs zero-shot and few-shot prompts from input text + examples
-- **SLM interface** — calls small model (e.g. local via `llama.cpp`, `ollama`, or HF `transformers`)
-- **LLM reference interface** — calls stronger model (e.g. Claude API, OpenAI) for ground truth
-- **Optimizer** — refines SLM prompt strategy to close gap with LLM reference output
-- **Evaluator** — computes F1/accuracy between SLM output and LLM reference
+| File | Role |
+|------|------|
+| `main.py` | CLI entry, orchestration, output table |
+| `models.py` | `WeakSLM` (local transformers) + `StrongLLM` (HF Inference API) |
+| `prompts.py` | `zero_shot`, `few_shot`, `optimized` builders + `extract_label` |
+| `evaluate.py` | `score(predictions, references)` → F1 + accuracy via sklearn |
 
-## Dependencies
+## Models
 
-No `requirements.txt` yet. Add one when first dependencies are installed.
+- **Weak SLM**: `Qwen/Qwen2.5-0.5B-Instruct` — loaded locally via `transformers` pipeline
+- **Strong LLM**: `Qwen/Qwen2.5-7B-Instruct` — called via `huggingface_hub.InferenceClient`
+
+## Prompt Strategies
+
+Three strategies in `prompts.py`:
+- `zero_shot` — baseline, no examples
+- `few_shot` — up to 3 labeled examples
+- `optimized` — few-shot + role prompting + chain-of-thought + output constraint (last line = label)
+
+`extract_label()` strips CoT reasoning by taking the last non-empty line of model output.
