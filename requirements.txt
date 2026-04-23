@@ -3,3 +3,4 @@ huggingface_hub>=0.24
 scikit-learn
 torch
 accelerate
+python-dotenv

@@ -14,6 +14,9 @@ class WeakSLM:
             model=self.MODEL,
             device_map="auto",
         )
+        # model's generation_config.json sets max_length=20 which conflicts
+        # with max_new_tokens; clear it so only max_new_tokens applies
+        self.pipe.model.generation_config.max_length = None
 
     def classify(self, prompt: str) -> str:
         messages = [{"role": "user", "content": prompt}]
